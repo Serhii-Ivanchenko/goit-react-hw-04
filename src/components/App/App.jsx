@@ -1,12 +1,13 @@
-import './App.css'
+import { useEffect } from 'react';
+import './App.css';
+import getPhotos from '../unsplash-api-fetch';
 
 function App() {
-  
-  return (
-    <>
-      
-    </>
-  )
+  useEffect(() => {
+    getPhotos()
+  });
+
+  return <></>;
 }
 
-export default App
+export default App;
