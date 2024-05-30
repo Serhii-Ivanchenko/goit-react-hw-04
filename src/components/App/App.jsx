@@ -15,7 +15,7 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, url: '' });
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -26,11 +26,11 @@ function App() {
       try {
         setIsLoading(true);
         setIsError(false);
-        const {results, total_pages} = await getPhotos(searchQuery, page);
+        const { results, total_pages } = await getPhotos(searchQuery, page);
         setImages(prevImages => {
           return [...prevImages, ...results];
         });
-        setShowLoadMoreBtn(total_pages && total_pages !== page);  
+        setShowLoadMoreBtn(total_pages && total_pages !== page);
       } catch (error) {
         setIsError(true);
       } finally {
@@ -51,13 +51,13 @@ function App() {
     setPage(page + 1);
   };
 
-  const handleImageClick = () => {
-    setIsModalOpen(true)
-  }
+  const handleImageClick = (url) => {
+    setIsModalOpen({ isOpen: true, url });
+  };
 
   const handleModalClose = () => {
-  setIsModalOpen(false)
-}
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -65,15 +65,18 @@ function App() {
 
       {isError && <ErrorMessage />}
 
-      {images.length > 0 && <ImageGallery items={images} 
-        onImageClick={handleImageClick} />}
-      
+      {images.length > 0 && (
+        <ImageGallery items={images} onImageClick={handleImageClick} />
+      )}
+
       {images.length > 0 && !isLoading && showLoadMoreBtn && (
         <LoadMoreBtn onClick={handleLoadMoreClick} />
       )}
 
       {isLoading && <Loader />}
-      {isModalOpen && <ImageModal isOpen={isModalOpen} onClose={handleModalClose} />}
+      {isModalOpen && (
+        <ImageModal url={isModalOpen.url} isOpen={isModalOpen.isOpen} onClose={handleModalClose} />
+      )}
     </>
   );
 }
