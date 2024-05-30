@@ -5,23 +5,46 @@ import SearchBar from '../SearchBar/SearchBar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const handleSearch = async query => {
-    try {
-      setIsLoading(true);
-      setIsError(false);
-      const data = await getPhotos(query);
-      setImages(data);
-    } catch (error) {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
+  useEffect(() => {
+    if (searchQuery === '') {
+      return;
     }
+
+    async function getData() {
+      try {
+        setIsLoading(true);
+        setIsError(false);
+        const data = await getPhotos(searchQuery, page);
+        setImages(prevImages => {
+          return [...prevImages, ...data];
+        });
+      } catch (error) {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    getData();
+  }, [searchQuery, page]);
+
+  const handleSearch = newQuery => {
+    setSearchQuery(newQuery);
+    setPage(1);
+    setImages([]);
+  };
+
+  const handleLoadMoreClick = () => {
+    setPage(page + 1);
   };
 
   return (
@@ -29,6 +52,9 @@ function App() {
       <SearchBar onSearch={handleSearch} />
       {isError && <ErrorMessage />}
       {images.length > 0 && <ImageGallery items={images} />}
+      {images.length > 0 && !isLoading && (
+        <LoadMoreBtn onClick={handleLoadMoreClick} />
+      )}
       {isLoading && <Loader />}
     </>
   );
