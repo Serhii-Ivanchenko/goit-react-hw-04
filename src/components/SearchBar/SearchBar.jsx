@@ -2,11 +2,11 @@
 import { BsSearch } from 'react-icons/bs';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function SearchBar({ onSubmit }) {
+export default function SearchBar({ onSearch }) {
   const handleSubmit = event => {
     event.preventDefault();
     const query = event.target.elements.searchQuery.value;
-    query.trim() === '' ? toast.error('Input can not be empty!') : onSubmit(query);
+    query.trim() === '' ? toast.error('Input can not be empty!') : onSearch(query);
     event.target.reset();
   };
 

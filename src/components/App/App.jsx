@@ -1,21 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import getPhotos from '../unsplash-api-fetch';
 import SearchBar from '../SearchBar/SearchBar';
+import ImageGallery from '../ImageGallery/ImageGallery';
 
 function App() {
-  // useEffect(() => {
-  //   getPhotos();
-  // });
+  const [images, setImages] = useState([]);
 
-  const handleSearch = query => {
-   console.log(query);
-   getPhotos(query);
+  const handleSearch = async query => {
+    console.log(query);
+    const data = await getPhotos(query);
+    setImages(data);
   };
 
   return (
     <>
-      <SearchBar onSubmit={handleSearch} />
+      <SearchBar onSearch={handleSearch} />
+      {images.length > 0 && <ImageGallery items={images} />}
     </>
   );
 }
