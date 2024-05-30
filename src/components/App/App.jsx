@@ -71,9 +71,9 @@ function App() {
       {images.length > 0 && !isLoading && showLoadMoreBtn && (
         <LoadMoreBtn onClick={handleLoadMoreClick} />
       )}
-      
+
       {isLoading && <Loader />}
-      <ImageModal isOpen={isModalOpen} onClose={handleModalClose} />
+      {isModalOpen && <ImageModal isOpen={isModalOpen} onClose={handleModalClose} />}
     </>
   );
 }
