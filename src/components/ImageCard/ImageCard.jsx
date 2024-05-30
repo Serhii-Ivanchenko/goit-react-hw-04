@@ -1,7 +1,11 @@
-export default function ImageCard({ item }) {
+export default function ImageCard({ item, onImageClick }) {
   return (
     <div>
-      <img src={item.urls.small} alt={item.alt_description} />
+      <img
+        src={item.urls.small}
+        alt={item.alt_description}
+        onClick={onImageClick}
+      />
       <ul>
         <li>
           <p>Photo by: {item.user.name}</p>

@@ -6,6 +6,7 @@ import ImageGallery from '../ImageGallery/ImageGallery';
 import Loader from '../Loader/Loader';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
+import ImageModal from '../ImageModal/ImageModal';
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,6 +15,7 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -49,15 +51,21 @@ function App() {
     setPage(page + 1);
   };
 
+  const handleImageClick = () => {
+    setIsModalOpen(true)
+    console.log('click');
+  }
+
   return (
     <>
       <SearchBar onSearch={handleSearch} />
       {isError && <ErrorMessage />}
-      {images.length > 0 && <ImageGallery items={images} />}
+      {images.length > 0 && <ImageGallery items={images} onImageClick={ handleImageClick} />}
       {images.length > 0 && !isLoading && showLoadMoreBtn && (
         <LoadMoreBtn onClick={handleLoadMoreClick} />
       )}
       {isLoading && <Loader />}
+      <ImageModal isOpen={isModalOpen} />
     </>
   );
 }
