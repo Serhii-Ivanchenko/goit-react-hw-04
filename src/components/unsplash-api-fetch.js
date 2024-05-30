@@ -10,8 +10,7 @@ export default async function getPhotos(searchQuery, page) {
       query: searchQuery,
       page,
       per_page: 3,
-      orientation: 'landscape',
     },
   });
-  return response.data.results;
+  return response.data;
 }

@@ -13,6 +13,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
+  const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -23,10 +24,11 @@ function App() {
       try {
         setIsLoading(true);
         setIsError(false);
-        const data = await getPhotos(searchQuery, page);
+        const {results, total_pages} = await getPhotos(searchQuery, page);
         setImages(prevImages => {
-          return [...prevImages, ...data];
+          return [...prevImages, ...results];
         });
+        setShowLoadMoreBtn(total_pages && total_pages !== page);
       } catch (error) {
         setIsError(true);
       } finally {
@@ -52,7 +54,7 @@ function App() {
       <SearchBar onSearch={handleSearch} />
       {isError && <ErrorMessage />}
       {images.length > 0 && <ImageGallery items={images} />}
-      {images.length > 0 && !isLoading && (
+      {images.length > 0 && !isLoading && showLoadMoreBtn && (
         <LoadMoreBtn onClick={handleLoadMoreClick} />
       )}
       {isLoading && <Loader />}
