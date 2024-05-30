@@ -30,7 +30,7 @@ function App() {
         setImages(prevImages => {
           return [...prevImages, ...results];
         });
-        setShowLoadMoreBtn(total_pages && total_pages !== page);
+        setShowLoadMoreBtn(total_pages && total_pages !== page);  
       } catch (error) {
         setIsError(true);
       } finally {
@@ -53,19 +53,27 @@ function App() {
 
   const handleImageClick = () => {
     setIsModalOpen(true)
-    console.log('click');
   }
+
+  const handleModalClose = () => {
+  setIsModalOpen(false)
+}
 
   return (
     <>
       <SearchBar onSearch={handleSearch} />
+
       {isError && <ErrorMessage />}
-      {images.length > 0 && <ImageGallery items={images} onImageClick={ handleImageClick} />}
+
+      {images.length > 0 && <ImageGallery items={images} 
+        onImageClick={handleImageClick} />}
+      
       {images.length > 0 && !isLoading && showLoadMoreBtn && (
         <LoadMoreBtn onClick={handleLoadMoreClick} />
       )}
+      
       {isLoading && <Loader />}
-      <ImageModal isOpen={isModalOpen} />
+      <ImageModal isOpen={isModalOpen} onClose={handleModalClose} />
     </>
   );
 }
