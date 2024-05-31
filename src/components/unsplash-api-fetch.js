@@ -9,7 +9,7 @@ export default async function getPhotos(searchQuery, page) {
       client_id: ACCESS_KEY,
       query: searchQuery,
       page,
-      per_page: 3,
+      per_page: 12,
     },
   });
   return response.data;

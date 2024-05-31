@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import getPhotos from '../unsplash-api-fetch';
 import SearchBar from '../SearchBar/SearchBar';
@@ -16,6 +16,8 @@ function App() {
   const [page, setPage] = useState(1);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, url: '' });
+
+  const appRef = useRef();
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -51,7 +53,7 @@ function App() {
     setPage(page + 1);
   };
 
-  const handleImageClick = (url) => {
+  const handleImageClick = url => {
     setIsModalOpen({ isOpen: true, url });
   };
 
@@ -59,8 +61,14 @@ function App() {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    if (page === 1) return;
+
+    appRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [images, page]);
+
   return (
-    <>
+    <div ref={appRef}>
       <SearchBar onSearch={handleSearch} />
 
       {isError && <ErrorMessage />}
@@ -75,9 +83,13 @@ function App() {
 
       {isLoading && <Loader />}
       {isModalOpen && (
-        <ImageModal url={isModalOpen.url} isOpen={isModalOpen.isOpen} onClose={handleModalClose} />
+        <ImageModal
+          url={isModalOpen.url}
+          isOpen={isModalOpen.isOpen}
+          onClose={handleModalClose}
+        />
       )}
-    </>
+    </div>
   );
 }
 
