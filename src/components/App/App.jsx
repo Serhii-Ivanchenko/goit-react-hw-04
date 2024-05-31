@@ -8,6 +8,12 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
 import ImageModal from '../ImageModal/ImageModal';
 
+const modalInitialParams = {
+  isOpen: false,
+  url: '',
+  description: '',
+};
+
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [images, setImages] = useState([]);
@@ -15,7 +21,7 @@ function App() {
   const [isError, setIsError] = useState(false);
   const [page, setPage] = useState(1);
   const [showLoadMoreBtn, setShowLoadMoreBtn] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState({ isOpen: false, url: '' });
+  const [modalParams, setModalParams] = useState(modalInitialParams);
 
   const appRef = useRef();
 
@@ -53,12 +59,12 @@ function App() {
     setPage(page + 1);
   };
 
-  const handleImageClick = url => {
-    setIsModalOpen({ isOpen: true, url });
+  const handleImageClick = (url, description) => {
+    setModalParams({ isOpen: true, url, description });
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false);
+    setModalParams(modalInitialParams);
   };
 
   useEffect(() => {
@@ -82,10 +88,11 @@ function App() {
       )}
 
       {isLoading && <Loader />}
-      {isModalOpen && (
+      {modalParams && (
         <ImageModal
-          url={isModalOpen.url}
-          isOpen={isModalOpen.isOpen}
+          url={modalParams.url}
+          description={modalParams.description}
+          isOpen={modalParams.isOpen}
           onClose={handleModalClose}
         />
       )}

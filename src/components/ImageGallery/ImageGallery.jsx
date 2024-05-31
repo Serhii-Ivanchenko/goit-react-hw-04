@@ -8,7 +8,9 @@ export default function ImageGallery({ items, onImageClick }) {
         <li key={item.id}>
           <ImageCard
             item={item}
-            onImageClick={() => onImageClick(item.urls.regular)}
+            onImageClick={() =>
+              onImageClick(item.urls.regular, item.alt_description)
+            }
           />
         </li>
       ))}
