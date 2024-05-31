@@ -1,6 +1,7 @@
 // import { Field, Form, Formik } from 'formik';
 import { BsSearch } from 'react-icons/bs';
 import toast, { Toaster } from 'react-hot-toast';
+import css from './SearchBar.module.css'
 
 export default function SearchBar({ onSearch }) {
   const handleSubmit = event => {
@@ -11,18 +12,19 @@ export default function SearchBar({ onSearch }) {
   };
 
   return (
-    <header>
+    <header className={css.header}>
       <Toaster />
-      <form onSubmit={handleSubmit}>
+      <form className={css.searchForm} onSubmit={handleSubmit}>
         <input
+          className={css.input}
           name="searchQuery"
           type="text"
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
         />
-        <button type="submit">
-          <BsSearch />
+        <button className={css.searchBtn} type="submit">
+          <BsSearch className={css.searchIcon} />
         </button>
       </form>
     </header>

@@ -10,7 +10,6 @@ export default function ImageModal({ isOpen, onClose, url, description }) {
       shouldCloseOnEsc={true}
       ariaHideApp={false}
       onRequestClose={onClose}
-      closeTimeoutMS={300}
     >
       <img className={css.image} src={url} alt={description} />
     </ReactModal>
